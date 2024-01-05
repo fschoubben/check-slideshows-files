@@ -52,7 +52,7 @@ def open_presentation(ppt_app, file, debug=False):
     # self.app = win32com.client.Dispatch("PowerPoint.Application")
     # Open presentation
     presentation = ""
-    print_debug(debug, file)a
+    print_debug(debug, file)
     filename = os.path.abspath(file)
     print_debug(debug, filename)
     try:

@@ -38,6 +38,9 @@ def main():
         try:
             check_shapes(py_win32_ppt_app, stud)
             max+=stud.max_points["slideshowObjectType"]
+            check_animations(py_win32_ppt_app, stud, key="slideshowAnimation")
+            max+=stud.max_points["slideshowAnimation"]
+
         except Exception as e:
             print("problème dans le check_shapes : No pdf file ? ")
         print(stud.firstname, " ", stud.name, " ", str(sum(stud.scores.values())), "sur ", max)
