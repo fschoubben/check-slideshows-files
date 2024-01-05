@@ -48,31 +48,30 @@ Function ReturnShapeTypes() As String
     ' Return the result
     ReturnShapeTypes = result
 End Function""")
-# TODO : it doesn't work with Test-1 and Test-2
-#     macros.append("""
-# Function HasAnimation() As Boolean
-#     Dim slide As slide
-#     Dim shape As shape
-#     Dim hasAnim As Boolean
-#
-#     ' Initialize to False
-#     hasAnim = False
-#
-#     ' Iterate through each slide
-#     For Each slide In ActivePresentation.Slides
-#         ' Check each shape on the slide for animation
-#         For Each shape In
-#             If shape.AnimationSettings.Animate <> msoAnimateNone Then
-#                 ' If at least one shape has animation, set the flag to True
-#                 hasAnim = True
-#                 Exit Function
-#             End If
-#         Next shape
-#     Next slide
-#
-#     ' Return the result
-#     HasAnimation = hasAnim
-# End Function""")
+    macros.append("""
+Function HasAnimation() As Boolean
+    Dim slide As slide
+    Dim shape As shape
+    Dim hasAnim As Boolean
+
+    ' Initialize to False
+    hasAnim = False
+
+    ' Iterate through each slide
+    For Each slide In ActivePresentation.Slides
+        ' Check each shape on the slide for animation
+        For Each shape In Slide.Shapes
+            If shape.AnimationSettings.Animate <> msoFalse Then
+                ' If at least one shape has animation, set the flag to True
+                HasAnimation = True
+                Exit Function
+            End If
+        Next shape
+    Next slide
+
+    ' Return the result
+    HasAnimation = hasAnim
+End Function""")
 # TODO : inspect, it's not working ( slide.Transition doesn't exists)
     macros.append("""
 Function CheckTransitions() As Integer
@@ -302,8 +301,8 @@ def main():
     debugging = True
     # TODO : keep ?    close_powerpoint(debugging)
     file_name_begin = "2024-01-S2-"
-    file_name = file_name_begin + "Test-1.pptx"
     # file_name = file_name_begin + "Test-1.pptx"
+    file_name = file_name_begin + "Test-1.pptx"
     # file_name = file_name_begin + "Delsalle-Lisa-PowerPoint.pptx"
     # file_name = file_name_begin + "Arens-Hélène-Diapo.pwp.pptx"
     # file_name = "2024-01-S2-Henrotte-Clémence-Diapo.pptx"
@@ -327,9 +326,9 @@ def main():
     print_debug(debugging, "macros added : OK")
     #
     # check_quote(ppt_app, stud, key="citation", debug=debug)
-    # check_animations(ppt_app, stud, key="slideshowAnimation", debug=debugging)
+    check_animations(ppt_app, stud, key="slideshowAnimation", debug=debugging)
     # check_transitions(ppt_app, stud, key="slideshowTransition", debug=debugging)
-    check_shapes(ppt_app, stud, key="slideshowObjectType", debug=debugging)
+    #check_shapes(ppt_app, stud, key="slideshowObjectType", debug=debugging)
 
     for key, value in stud.scores.items():
         if value !=0:
