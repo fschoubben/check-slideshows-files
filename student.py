@@ -1,7 +1,7 @@
 class Student:
-    max_points = {"format": 2, "nomFichiers": 2,"poids": 2, "orthographe": 0, "pages": 0,
-                  "styles": 4, "piedDePage": 4, "espaces": 4, "TDM": 2, "section": 2, "listes": 2,
-                  "tableau": 2,  "citation": 2, "noteBasPage": 2, "lien": 2, "images": 4,
+    max_points = {#"format": 2, "nomFichiers": 2,"poids": 2, "orthographe": 0, "pages": 0,
+                  #"styles": 4, "piedDePage": 4, "espaces": 4, "TDM": 2, "section": 2, "listes": 2,
+                  #"tableau": 2,  "citation": 2, "noteBasPage": 2, "lien": 2, "images": 4,
                   "slideshowObjectType": 4, "slideshowAnimation": 2, "slideshowTransition": 1,
                   "slideshowNameInTemplate":1, "slideshowOtherTypeOfSlideshow": 2}
 
