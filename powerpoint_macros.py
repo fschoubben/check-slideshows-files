@@ -129,11 +129,13 @@ def check_shapes(ppt_app, student, key="slideshowObjectType", debug=False):
                        16 : "Media", 17 : "Text box", 19 : "Table", 20 : "Canvas", 21 : "Diagram", 24 : "SmartArt graphic",
                        26 : "Web video", 28 : "Graphic", 29 : "Linked graphic", 30 : "3D model", 31 : "Linked 3D model",
                        14 : "PlaceHolder"}
-        # TODO : check what is 1 : Autoshape : "regular shape shapes" (square, circle...)
+        # TODO : check what is 1 EXACTLY : Autoshape : "regular shape shapes" (square, circle...)
+        # 6 : groups
         # 14 : is Placeholder, the default shape in some slides
-        #
-        accepted_values = [3, 4, 5, 7, 8, 10, 11, 13, 15, 16, 17, 19, 20, 21, 24, 26, 28, 29, 30, 31]
+        # shapes values : https://learn.microsoft.com/en-us/office/vba/api/office.msoshapetype
+        accepted_values = [1, 3, 4, 5, 7, 8, 10, 11, 13, 15, 16, 17, 19, 20, 21, 24, 26, 28, 29, 30, 31]
         # TODO : next year ? object of shape 6 is a group
+        # TODO 2024 : double check values, especially 1 and how to make difference between video and audio inserted
         shapes_nb=0
         for sh in shapes:
             try:
@@ -149,12 +151,12 @@ def check_shapes(ppt_app, student, key="slideshowObjectType", debug=False):
         elif shapes_nb >= 2:
             print_debug(debug, "OK, mais seulement 2 ou 3 types d'objets présents. ")
             why += "moins de 4 types d'objets dans le document. "
-            to_check_manually += "vérifier transitions - "
+            to_check_manually += "vérifier trtypes d'objets. "
             score = max_scores/2
         else:
             print_debug(debug, "pas de  transition")
             why += "moins de 2 type d'objets dans le document. "
-            to_check_manually += "vérifier transitions - "
+            to_check_manually += "vérifier types d'objets. "
     except Exception as e:
         sys.stderr.write("error in word_macros.py\check_shapes " + str(e))
 
@@ -297,13 +299,15 @@ def open_presentation(file, debug=False):
 
 
 def main():
-    debugging = False
+    debugging = True
     # TODO : keep ?    close_powerpoint(debugging)
     file_name_begin = "2024-01-S2-"
-    # file_name = file_name_begin + "Test-1.docx"
+    file_name = file_name_begin + "Test-1.pptx"
     # file_name = file_name_begin + "Test-1.pptx"
     # file_name = file_name_begin + "Delsalle-Lisa-PowerPoint.pptx"
-    file_name = file_name_begin + "Arens-Hélène-Diapo.pwp.pptx"
+    # file_name = file_name_begin + "Arens-Hélène-Diapo.pwp.pptx"
+    # file_name = "2024-01-S2-Henrotte-Clémence-Diapo.pptx"
+    # file_name = "2024-01-S2-LEE-Chae-Yeon-diapo.pptx"
 
     ensure_file_is_closed_and_exists(file_name)
 
