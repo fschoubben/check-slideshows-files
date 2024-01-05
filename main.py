@@ -2,7 +2,9 @@ from powerpoint_macros import *
 from check_slideshows_tools import *
 from student import Student
 
-working_directory = "."
+debug = True
+working_directory = os.path.abspath("slideshows")
+print_debug(debug, "wd = "+working_directory)
 excel_file_for_results = working_directory+"/"+"2024-01-auto-correct-slideshows-results.xlsx"
 
 
@@ -14,11 +16,13 @@ def main():
     py_win32_ppt_app = win32com.client.Dispatch("PowerPoint.Application")
 
     # on prends la liste des fichiers PDF
-    lf = listFiles(".", ".pptx")
+    lf = listFiles(working_directory, ".pptx")
     print("files array : ", lf)
     # print(listefichiers)
     students = []
     for f in lf:
+        print_debug(debug, "file = " + f)
+
         stud = Student()
         files_parts = f.split("-")
         stud.name = files_parts[3]
@@ -26,7 +30,7 @@ def main():
 
         max_score = 0
 
-        presentation = open_presentation(py_win32_ppt_app, f)
+        presentation = open_presentation(py_win32_ppt_app, working_directory+"/"+f)
         add_macros(presentation)
 
         # check filename
