@@ -86,7 +86,7 @@ Function CheckTransitions() As Integer
     ' Iterate through each slide
     For Each slide In ActivePresentation.Slides
         ' Check if the slide has a transition
-        If slide.Transition.EntryEffect <> ppEffectNone Then
+        If slide.SlideShowTransition.EntryEffect <> ppAnimateLevelNone  Then
             ' Increment the transition count
             transitionCount = transitionCount + 1
         End If
@@ -303,6 +303,10 @@ def main():
     file_name_begin = "2024-01-S2-"
     # file_name = file_name_begin + "Test-1.pptx"
     file_name = file_name_begin + "Test-1.pptx"
+    file_name = file_name_begin + "Test-4.pptx" # no transition
+    # file_name = file_name_begin + "Test-5.pptx"  # 2 transitions
+    # file_name = file_name_begin + "Test-6.pptx"  # 1 transition
+
     # file_name = file_name_begin + "Delsalle-Lisa-PowerPoint.pptx"
     # file_name = file_name_begin + "Arens-Hélène-Diapo.pwp.pptx"
     # file_name = "2024-01-S2-Henrotte-Clémence-Diapo.pptx"
@@ -326,8 +330,8 @@ def main():
     print_debug(debugging, "macros added : OK")
     #
     # check_quote(ppt_app, stud, key="citation", debug=debug)
-    check_animations(ppt_app, stud, key="slideshowAnimation", debug=debugging)
-    # check_transitions(ppt_app, stud, key="slideshowTransition", debug=debugging)
+    # check_animations(ppt_app, stud, key="slideshowAnimation", debug=debugging)
+    check_transitions(ppt_app, stud, key="slideshowTransition", debug=debugging)
     #check_shapes(ppt_app, stud, key="slideshowObjectType", debug=debugging)
 
     for key, value in stud.scores.items():

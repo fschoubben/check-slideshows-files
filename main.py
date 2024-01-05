@@ -40,6 +40,9 @@ def main():
             max+=stud.max_points["slideshowObjectType"]
             check_animations(py_win32_ppt_app, stud, key="slideshowAnimation")
             max+=stud.max_points["slideshowAnimation"]
+            check_transitions(py_win32_ppt_app, stud, key="slideshowTransition")
+            max+=stud.max_points["slideshowTransition"]
+
 
         except Exception as e:
             print("problème dans le check_shapes : No pdf file ? ")
