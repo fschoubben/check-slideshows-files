@@ -72,7 +72,6 @@ Function HasAnimation() As Boolean
     ' Return the result
     HasAnimation = hasAnim
 End Function""")
-# TODO : inspect, it's not working ( slide.Transition doesn't exists)
     macros.append("""
 Function CheckTransitions() As Integer
     Dim slide As slide
