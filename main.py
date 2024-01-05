@@ -16,6 +16,9 @@ def main():
     students=[]
     for f in lf:
         stud = Student()
+        files_parts = f.split("-")
+        stud.name=files_parts[3]
+        stud.firstname = files_parts[4]
 
         max = 0
 
@@ -42,11 +45,12 @@ def main():
             max+=stud.max_points["slideshowAnimation"]
             check_transitions(py_win32_ppt_app, stud, key="slideshowTransition")
             max+=stud.max_points["slideshowTransition"]
-
+            check_name_in_mask(py_win32_ppt_app, stud, key="slideshowNameInTemplate")
+            max += stud.max_points["slideshowNameInTemplate"]
 
         except Exception as e:
             print("problème dans le check_shapes : No pdf file ? ")
-        print(stud.firstname, " ", stud.name, " ", str(sum(stud.scores.values())), "sur ", max)
+        print(stud.name, " ", stud.firstname, " ", str(sum(stud.scores.values())), "sur ", max)
         print("========================================")
         students.append(stud)
         # time.sleep(5)

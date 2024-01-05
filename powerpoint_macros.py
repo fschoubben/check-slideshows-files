@@ -16,6 +16,46 @@ remove_non_english = lambda s: re.sub(r'[^a-zA-Z0-9]', '', s)
 def define_macros():
     macros = []
     macros.append("""
+Function CheckMasterSlideName(targetName As String) As Boolean
+    ' Define the name to check
+    ' Dim targetName As String
+    ' targetName = "Test"  ' Replace with the actual name you're looking for
+
+    ' Iterate through each slide master
+    'Dim master As master
+    Dim presDesign As Design
+    Dim CL As CustomLayout
+    Dim shp As Shape
+    Dim mName As String, mCode As String, mPhone As String, fName As String
+    For Each presDesign In ActivePresentation.Designs
+        For Each CL In presDesign.SlideMaster.CustomLayouts
+            ' check if name is in sub-slidemasters
+            For Each shp In CL.Shapes
+                If shp.HasTextFrame Then
+                    If InStr(1, shp.TextFrame.TextRange, targetName, vbTextCompare) > 0 Then
+                        ' The name is found
+                        CheckMasterSlideName = True
+                        Exit Function
+                    End If
+                End If
+            Next shp
+            For Each shp In presDesign.SlideMaster.Shapes
+            ' check if name is in "master slideMaster"
+                If shp.HasTextFrame Then
+                    If InStr(1, shp.TextFrame.TextRange, targetName, vbTextCompare) > 0 Then
+                        ' The name is found
+                        CheckMasterSlideName = True
+                        Exit Function
+                    End If
+                End If
+            Next shp
+        Next CL
+    Next presDesign
+
+    ' The name is not found
+    CheckMasterSlideName = False
+End Function""")
+    macros.append("""
 Function ReturnShapeTypes() As String
     Dim slide As slide
     Dim shape As shape
@@ -196,7 +236,32 @@ def check_transitions(ppt_app, student, key="slideshowTransition", debug=False):
         student.to_check.add(key)
     print_debug(debug, "fin check_transitions ")
     return {}
+def check_name_in_mask(ppt_app, student, key="slideshowNameInTemplate", debug=False):
+    # TODO : ensure it works with student files...
+    max_scores = student.max_points[key]
+    why = ""
+    to_check_manually = ""
+    score = 0
 
+    try:
+        name_in_mask = ppt_app.Run("CheckMasterSlideName", student.name)
+        if name_in_mask:
+            print_debug(debug, "OK, Nom présent dans le masque. ")
+            score = max_scores
+        else:
+            print_debug(debug, "pas de Nom présent dans le masque'")
+            why += "pas de Nom présent dans le masque du document. "
+            to_check_manually += "vérifier masque - "
+    except Exception as e:
+        sys.stderr.write("error in word_macros.py\check_name_in_mask " + str(e))
+
+    student.scores[key] = score
+    student.reasons[key] = why
+    student.to_check_manually += to_check_manually
+    if student.scores[key] < student.max_points[key]:
+        student.to_check.add(key)
+    print_debug(debug, "fin check_name_in_mask ")
+    return {}
 def check_animations(ppt_app, student, key="slideshowAnimation", debug=False):
     max_scores = student.max_points[key]
     why = ""
@@ -305,6 +370,8 @@ def main():
     file_name = file_name_begin + "Test-4.pptx" # no transition
     # file_name = file_name_begin + "Test-5.pptx"  # 2 transitions
     # file_name = file_name_begin + "Test-6.pptx"  # 1 transition
+    file_name = file_name_begin + "Test-7.pptx"  # Test Name in mask (not "all slides")
+    # file_name = file_name_begin + "Test-8.pptx"  # Test Name in mask "all slides"
 
     # file_name = file_name_begin + "Delsalle-Lisa-PowerPoint.pptx"
     # file_name = file_name_begin + "Arens-Hélène-Diapo.pwp.pptx"
@@ -330,7 +397,8 @@ def main():
     #
     # check_quote(ppt_app, stud, key="citation", debug=debug)
     # check_animations(ppt_app, stud, key="slideshowAnimation", debug=debugging)
-    check_transitions(ppt_app, stud, key="slideshowTransition", debug=debugging)
+    # check_transitions(ppt_app, stud, key="slideshowTransition", debug=debugging)
+    check_name_in_mask(ppt_app, stud, key="slideshowNameInTemplate", debug=debugging)
     #check_shapes(ppt_app, stud, key="slideshowObjectType", debug=debugging)
 
     for key, value in stud.scores.items():
